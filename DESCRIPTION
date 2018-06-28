@@ -8,7 +8,7 @@ Authors@R: c(person("Ben", "Bond-Lamberty",
   person("Robert", "Link",        role = "aut"),
   person("Pralit", "Patel",       role = "aut", comment = c(ORCID = "0000-0003-3992-1061")))
 Description: Output products of the gcamdata package suitable for old/new comparison tests.
-Depends: R (>= 3.4.2)
+Depends: R (>= 3.1.2)
 License: ECL2 + file LICENSE
 Encoding: UTF-8
 LazyData: false
