@@ -2,7 +2,7 @@
 
 .onLoad <- function(libname, pkgname) {
   # load external package data
-  eval(parse(text=paste0("utils::data(",paste(paste0("COMPDATA", seq(1, NUM_BINS)), collapse=","), ")")))
+  eval(parse(text=paste0("utils::data(",paste(paste0("COMPDATA", seq(1, NUM_BINS)), collapse="',"), "')")))
 }
 
 #' A list of all compdata suitable for use in gcamdata's old/new tests.
