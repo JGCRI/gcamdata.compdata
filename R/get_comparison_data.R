@@ -1,8 +1,19 @@
 
+# Wrapper around the actual get_all_compdata to ensure we only create one instance of
+# COMPDATA regardless of how many times the function is called.  In addtion, doing it this
+# way we do not have to worry about order of operations in terms of loading the package data.
+make_get_all_compdata <- function() {
+  COMPDATA <- NULL
+  function(dot) {
+    if(is.null(COMPDATA)) {
+      # load the package data to get COMPDATAi for i in 1..NUM_BINS
+      eval(parse(text=paste0("utils::data(",paste(paste0("'COMPDATA", seq(1, NUM_BINS)), collapse="',"), "')")))
+      # combine each of those COMPDATAi into a single list
+      COMPDATA <<- eval(parse(text=paste0("c(",paste(paste0("COMPDATA", seq(1, NUM_BINS)), collapse=","), ")")))
+    }
 
-.onLoad <- function(libname, pkgname) {
-  # load external package data
-  eval(parse(text=paste0("utils::data(",paste(paste0("'COMPDATA", seq(1, NUM_BINS)), collapse="',"), "')")))
+    invisible(COMPDATA)
+  }
 }
 
 #' A list of all compdata suitable for use in gcamdata's old/new tests.
@@ -12,9 +23,7 @@
 #' these details.
 #' @return The list of all COMPDATA
 #' @export
-get_all_compdata <- function() {
-  eval(parse(text=paste0("c(",paste(paste0("COMPDATA", seq(1, NUM_BINS)), collapse=","), ")")))
-}
+get_all_compdata <- make_get_all_compdata()
 
 #' Get the comparison data for the given data name
 #'

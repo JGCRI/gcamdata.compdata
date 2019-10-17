@@ -13,6 +13,12 @@ comment_char <- "#"
 for(output_fn in list.files(outputs_dir, pattern = "*.csv", full.names = TRUE)) {
     dataname <- sub('.csv$', '', basename(output_fn))
     data <- read_csv(output_fn, comment = comment_char)
+    # we will store the individual data compressed in the list but not compress
+    # the .rda file at the end so that when it gets loaded back into memory for
+    # tests it will still be compressed and not be a massive memory hog that hangs
+    # around
+    # users will use gcamdata.compdata::get_comparison_data to retrieve the data
+    # which will handle decompression
     conn <- rawConnection(raw(0), "w")
     saveRDS(data, file = conn)
     data_compress <- memCompress(rawConnectionValue(conn), "xz")
@@ -47,6 +53,8 @@ for(n in names(COMPDATA)) {
   compdata_bins[[curr_bin]][["data"]][[n]] <- COMPDATA[[n]]
 }
 
+# save the number of bins we ended up using as internal package data so it can be
+# used when we load it back up to reassemble all of the bins of COMPDATA back togehter
 use_data(NUM_BINS, overwrite = TRUE, internal = TRUE, compress = FALSE)
 
 # save data, we will generate data names to be COMPDATA1..NUM_BINS
@@ -58,5 +66,3 @@ for(i in seq_len(NUM_BINS)) {
   assign(dataname, compdata_bins[[i]][["data"]])
   eval(parse(text=paste0("use_data(",dataname, ", overwrite = TRUE, internal = FALSE, compress = FALSE)")))
 }
-
-#use_data(COMPDATA, overwrite = TRUE, internal = FALSE, compress = FALSE)
