@@ -1,5 +1,5 @@
 Package: gcamdata.compdata
-Title: Output products of the gcamdata package.
+Title: Output products of the gcamdata package
 Version: 1.0
 Authors@R: c(person("Ben", "Bond-Lamberty",
                 email = "bondlamberty@pnnl.gov",
@@ -8,6 +8,14 @@ Authors@R: c(person("Ben", "Bond-Lamberty",
   person("Robert", "Link",        role = "aut"),
   person("Pralit", "Patel",       role = "aut", comment = c(ORCID = "0000-0003-3992-1061")))
 Description: Output products of the gcamdata package suitable for old/new comparison tests.
+  This data is kept in a separate package as it is a sizeable data product
+  and so we want users to only need to load it upon request. This also allows
+  us to decouple this history (in order to keep the Git repository at a
+  reasonable size) from the actual code development.
+  Users can update the compdata by copying in from the \code{gcamdata/output}
+  into \code{gcamdata.compdata/output}; then
+  \code{source("data-raw/update-compdata.R")}.
+  Users should avoid doing extended development on this package as we may choose to do maintenance on the history at any time.
 Depends: R (>= 3.1.2)
 Imports: readr (>= 1.3.1)
 License: ECL2 + file LICENSE
