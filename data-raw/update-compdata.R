@@ -12,7 +12,12 @@ outputs_dir <- "./outputs"
 comment_char <- "#"
 for(output_fn in list.files(outputs_dir, pattern = "*.csv", full.names = TRUE)) {
     dataname <- sub('.csv$', '', basename(output_fn))
-    data <- read_csv(output_fn, comment = comment_char)
+    if (output_fn == "./outputs/L142.pfc_R_S_T_Yh.csv"){
+      data <- read_csv(output_fn, comment = comment_char, col_types = c("dccccdcd"))
+    } else {
+      data <- read_csv(output_fn, comment = comment_char)
+    }
+
     # we will store the individual data compressed in the list but not compress
     # the .rda file at the end so that when it gets loaded back into memory for
     # tests it will still be compressed and not be a massive memory hog that hangs
